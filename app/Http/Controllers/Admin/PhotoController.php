@@ -319,7 +319,7 @@ class PhotoController extends Controller
                 $line = 1;
                 while($y < $imgHeight) {
                     if($line%2 == 0) {
-                        $xx = $x+90;
+                        $xx = $x+150;
                     }
                     $SingleImage->insert($watermark, 'top-left', $xx, $y);
                     $y += $wmarkHeight+100;
@@ -328,7 +328,7 @@ class PhotoController extends Controller
                     $line += 1;
                 }
 
-                  $x += $wmarkWidth+100;
+                  $x += $wmarkWidth+150;
 
             }
 
@@ -337,34 +337,30 @@ class PhotoController extends Controller
             else
             {
                 //for normal images
-            $x                      = 20;
-            $xx                     = 20;
-            $y                      = 10;
-            $position  = 1;
-            while ($x < $imgWidth) {
-                $y = 35;
-                $xx = $x;
+                $x                      = 20;
+                $xx                     = 40;
+                $y                      = 20;
 
-                while($y < $imgHeight) {
-                    $SingleImage->insert($watermark, 'top-left', $xx, $y);
-                    $y += $wmarkHeight+90;
-                    $position+=1;
-                    if($position%2 == 0) {
-                        if($y==20) {
-                            $xx = $x+10;
-                        } else {
-                            $xx = $x+110;
+                while ($x < $imgWidth) {
+                    $y = 20;
+                    $xx = $x;
+                    $line = 1;
+                    while($y < $imgHeight) {
+                        if($line%2 == 0) {
+                            $xx = $x+150;
                         }
-
-                    } else {
+                        $SingleImage->insert($watermark, 'top-left', $xx, $y);
+                        $y += $wmarkHeight+100;
                         $xx = $x;
+
+                        $line += 1;
                     }
+
+                      $x += $wmarkWidth+150;
+
                 }
 
-                  $x += $wmarkWidth+70;
-            }
-
-            $SingleImage->save($pathOfWatermarkImage, 80); //for single image
+                $SingleImage->save($pathOfWatermarkImage, 80); //for single image
             //
             }
 
