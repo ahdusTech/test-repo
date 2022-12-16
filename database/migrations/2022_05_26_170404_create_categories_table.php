@@ -17,6 +17,7 @@ class CreateCategoriesTable extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->string('status')->nullable();
+	    $table->string('sort')->nullable();
             $table->timestamps();
         });
     }

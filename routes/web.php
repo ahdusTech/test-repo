@@ -28,9 +28,10 @@ Route::post('/access/grant', 'HomeController@access_grant')->name('access_grant'
 
 // testing starts
 
-Route::get('testing', function() {
-    return view('test.image');
-})->name('view.image');
+
+//Route::get('testing', function() {
+  //  return view('test.image');
+//})->name('view.image');
 
 Route::get('/test/users', 'testController@testusers')->name('testusers');
 

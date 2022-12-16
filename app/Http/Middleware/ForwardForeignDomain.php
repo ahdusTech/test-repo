@@ -29,18 +29,18 @@ class ForwardForeignDomain
         $appUrl = config('app.url');
 
         // Check, if the app-url matches the current host
-        if( !preg_match("/http(s)?:\/\/$host(:[0-9]*)?/", $appUrl) ) {
+      //  if( !preg_match("/http(s)?:\/\/$host(:[0-9]*)?/", $appUrl) ) {
 
             // The requesting host does not match the app-url
             // We need to encrypt the current host and forward the user to the main-domain
-            $hash = Crypt::encryptString($host);
+        //    $hash = Crypt::encryptString($host);
 
-            $url = $appUrl . route('landingpage.domain', [ 'hash' => $hash], false );
+          //  $url = $appUrl . route('landingpage.domain', [ 'hash' => $hash], false );
 
             // Redirect the user to the landingpage with hashed domain
-            return redirect( $url );
+            //return redirect( $url );
 
-        }
+//        }
 
         return $next($request);
     }
