@@ -66,7 +66,7 @@ label{
             <label for="image" class="col-sm-2 col-form-label"> Bild <code>*</code></label>
             <div class="col-sm-4">
 
-                <img src=" {{ asset('/storage/categories/'.$category->image) }} "
+                <img src=" {{ asset('/images/categories/'.$category->image) }} "
                 style="object-fit: cover;width: 32.255rem;border: 1px solid lightgrey;padding: 1%;">
 
             </div>
