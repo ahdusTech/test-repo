@@ -49,7 +49,7 @@ a:hover h2 {
             <a href="{{ url('collections/' . $category->id . '/' . $category->name) }}" >
                 <figure>
                     {{--  <img oncontextmenu=return!1 src="{{ url('/storage/'. $category->image) }}" alt="Image" class="img-fluid" style="width: 100%;">  --}}
-                    <img src="{{ url('/storage/categories/'. $category->image) }}" alt="Image" class="img-fluid" style="width: 100%;border-radius: 16px;">
+                    <img src="{{ url('/images/categories/'. $category->image) }}" alt="Image" class="img-fluid" style="width: 100%;border-radius: 16px;">
                     <figcaption class="d-flex align-items-left justify-content-left">
                         <h2 class="caption">{{ $category->name }}</h2>
                     </figcaption>
