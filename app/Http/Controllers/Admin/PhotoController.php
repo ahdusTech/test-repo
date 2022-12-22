@@ -279,8 +279,9 @@ class PhotoController extends Controller
             //filename to store
             $ImageNameOriginal = $filename.'_original_'.time().'.'.$extension;
             //Upload File
-            $originalPath = public_path() . '/images/photos/originalImage/';
             $OriginalImage = Image::make($image->getRealPath());
+            $originalPath = public_path() . '/images/photos/originalImage/';
+
             $OriginalImage->save($originalPath . $ImageNameOriginal);
 
 
@@ -486,10 +487,13 @@ class PhotoController extends Controller
            $smallthumbnail->save($smallthumbnailpath . $smallfilenametostore);
 
            //upload file without watermark and original image
-           $ImageNameOriginal       = time().$image->getClientOriginalName();
+           $filenamewithextension = $image->getClientOriginalName();
+           $filename = pathinfo($filenamewithextension, PATHINFO_FILENAME);
+           $extension = $image->getClientOriginalExtension();
+           $ImageNameOriginal       = $filename.'_'.time().'.'.$extension;
            $imgFileOriginal         = Image::make($image->getRealPath());       //image resize from here;
            $pathOfCollectionImage   = public_path() . '/images/photos/originalImage/';
-           $imgFileOriginal->save($pathOfCollectionImage . $ImageNameOriginal);
+           $image->save($pathOfCollectionImage . $ImageNameOriginal);
 
 
             //upload file with watermark and resized image with new variable single image
