@@ -349,13 +349,14 @@ ul {
                     @if ($latestPhoto->status == 'on')
 
                     @php
-                    $height = Image::make(storage_path('/app/public/photos/').$latestPhoto->image)->height();
-                    $width = Image::make(storage_path('/app/public/photos/').$latestPhoto->image)->width();
+                    $height = Image::make('images/photos/'.$latestPhoto->image)->height();
+                    $width = Image::make('images/photos/'.$latestPhoto->image)->width();
                     @endphp
+
                     {{--  {{ $subcategoryId }}  --}}
                     <a class="item withImage" href="{{ url('/collection/image/'.$latestPhoto->category_id.'/'.$latestPhoto->id.'/'.$subcategoryId) }}" width={{ $width }} height={{ $height }}
                         style="background-color: #69DF7B;
-                        background-image: url({{asset('storage/photos/'.$latestPhoto->image)}});" data-high-res-background-image-url="{{ asset('storage/photos/'.$latestPhoto->image) }}">
+                        background-image: url({{asset('images/photos/'.$latestPhoto->image)}});" data-high-res-background-image-url="{{ asset('images/photos/'.$latestPhoto->image) }}">
                         <div class="overlay">
                             <div class="texts">
                             <p style="margin-bottom: 4px;line-height: 17px;">{{ $latestPhoto->description  }}</p>
