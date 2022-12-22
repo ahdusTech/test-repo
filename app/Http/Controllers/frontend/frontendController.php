@@ -149,10 +149,10 @@ class frontendController extends Controller
         // dd($subcategoryId);
         $image         = Photo::findorfail($image_id);
         //sorage path
-        $storagePath   = storage_path('/app/public/photos/originalImage') . '/' . $image->original_image;
+        $public_path   = public_path() . '/images/photos/originalImage/' . $image->original_image;
 
         //getImageResolution from Imagick
-        $imageDPI = new \Imagick($storagePath);
+        $imageDPI = new \Imagick($public_path);
         //get image width
         $imageWidth = $imageDPI->getImageWidth();
         //get image height
@@ -202,10 +202,10 @@ class frontendController extends Controller
         // dd($subcategoryId);
         $image         = Photo::findorfail($image_id);
         //sorage path
-        $storagePath   = storage_path('/app/public/photos/originalImage') . '/' . $image->original_image;
+        $public_path   = public_path() . '/images/photos/originalImage/' . $image->original_image;
 
         //getImageResolution from Imagick
-        $imageDPI = new \Imagick($storagePath);
+        $imageDPI = new \Imagick($public_path);
         //get image width
         $imageWidth = $imageDPI->getImageWidth();
         // dd($imageWidth);
