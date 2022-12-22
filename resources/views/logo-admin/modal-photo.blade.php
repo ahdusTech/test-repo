@@ -14,7 +14,7 @@
        <form action="{{route('delete-process-photo')}}" method="post">
         @csrf
         <div class="modal-body">
-            <img src="{{ asset('/storage/photos/originalImage/'.$photo->original_image) }}" alt="" class="img-fluid">
+            <img src="{{ asset('/images/photos/originalImage/'.$photo->original_image) }}" alt="" class="img-fluid">
         </div>
         {{--  <div class="modal-footer">
             <button type="button" class="btn btn-default btn-sm"
