@@ -111,7 +111,7 @@ class PhotoController extends Controller
                         <label data-href="' . route('get-modal-photo') . '"
                         data-id="' . $row->id . '"
                         data-name="get-delete-inquiry-modal" style="cursor: pointer" class="OpenModal">
-                        <img src="' . asset('/storage/photos/thumbnail/'.$row->small_thumbnail) . '" style="height:50px; margin-top:5px; margin-bottom:3px;"/></label>
+                        <img src="' . asset('/images/photos/thumbnail/'.$row->small_thumbnail) . '" style="height:50px; margin-top:5px; margin-bottom:3px;"/></label>
                         </div>';
                     })
                     ->addColumn('description', function($row){
@@ -252,26 +252,23 @@ class PhotoController extends Controller
             });
             $height = $imgFileCollection->height();
             $width = $imgFileCollection->width();
-            $pathOfOriginalImage = storage_path('/app/public/photos/') . '/' . $ImageNameresized;
-            $imgFileCollection->save($pathOfOriginalImage); //for collection
+            $pathOfOriginalImage = public_path() . '/images/photos/';
+            $imgFileCollection->save($pathOfOriginalImage . $ImageNameresized);
 
 
             //upload file for small thmbnails
-            $filenamewithextension = $image->getClientOriginalName();
-            $filename = pathinfo($filenamewithextension, PATHINFO_FILENAME);
-            //get extension
-            $extension = $image->getClientOriginalExtension();
-            //filename to store
-            $smallfilenametostore = $filename.'_small_'.time().'.'.$extension;
+            $image = $request->file('image');
+            $smallfilenametostore = time(). 'small_thumbnail '.$image->getClientOriginalName();
+
             //resize image in storage
-            $smallthumbnailpath = storage_path('/app/public/photos/thumbnail') . '/' . $smallfilenametostore;
+            $smallthumbnailpath = public_path() . '/images/photos/thumbnail/';
             $smallthumbnail = Image::make($image->getRealPath());
             $smallthumbnail->resize(150, 93, function($constraint)
             {
                 $constraint->aspectRatio();
 
             });
-            $smallthumbnail->save($smallthumbnailpath); //for small thumbnail
+            $smallthumbnail->save($smallthumbnailpath . $smallfilenametostore);
 
 
             //upload file with its original dpi values
@@ -280,23 +277,28 @@ class PhotoController extends Controller
             //get extension
             $extension = $image->getClientOriginalExtension();
             //filename to store
-            $ImageNameOriginal = $filename.'_'.time().'.'.$extension;
+            $ImageNameOriginal = $filename.'_original_'.time().'.'.$extension;
             //Upload File
-            $path = $image->storeAs('public/photos/originalImage', $ImageNameOriginal);
+            $originalPath = public_path() . '/images/photos/originalImage/';
+            $OriginalImage = Image::make($image->getRealPath());
+            $OriginalImage->save($originalPath . $ImageNameOriginal);
 
 
 
 
             //upload file with watermark and resized image with new variable single image
             $ImageNameWatermark= time().$image->getClientOriginalName();
+            // dd($ImageNameWatermark);
             $SingleImage = Image::make($image->getRealPath())
+            // dd($SingleImage);
             ->resize(900, 500, function($constraint)
             {
                 $constraint->aspectRatio();
 
             });
-            $pathOfWatermarkImage = storage_path('/app/public/photos/singleImage') . '/' . $ImageNameWatermark;
-            $watermarkPath = public_path('frontend/img/logo.png');
+            // dd($SingleImage);
+            $pathOfWatermarkImage   = public_path() . '/images/photos/singleImage/';
+            $watermarkPath          = public_path('frontend/img/logo.png');
             $watermark              = Image::make($watermarkPath)->resize(160, 30)->opacity(30);
             $wmarkWidth             = $watermark->width();
             $wmarkHeight            = $watermark->height();
@@ -304,10 +306,6 @@ class PhotoController extends Controller
             $imgWidth               = $SingleImage->width();
             // dd($imgWidth, $imgHeight);
 
-
-            //for panaorama images
-            if($imgWidth > $imgHeight)
-            {
             // dd('panorama');
             $x                      = 20;
             $xx                     = 40;
@@ -332,43 +330,8 @@ class PhotoController extends Controller
 
             }
 
-            $SingleImage->save($pathOfWatermarkImage, 80); //for single image
-            }
-            else
-            {
-                //for normal images
-                $x                      = 20;
-                $xx                     = 40;
-                $y                      = 20;
-
-                while ($x < $imgWidth) {
-                    $y = 20;
-                    $xx = $x;
-                    $line = 1;
-                    while($y < $imgHeight) {
-                        if($line%2 == 0) {
-                            $xx = $x+150;
-                        }
-                        $SingleImage->insert($watermark, 'top-left', $xx, $y);
-                        $y += $wmarkHeight+100;
-                        $xx = $x;
-
-                        $line += 1;
-                    }
-
-                      $x += $wmarkWidth+150;
-
-                }
-
-                $SingleImage->save($pathOfWatermarkImage, 80); //for single image
-            //
-            }
-
-
-            //
-
-
-
+            // $SingleImage->save($pathOfWatermarkImage, 80); //for single image
+            $SingleImage->save($pathOfWatermarkImage . $ImageNameWatermark, 80); //for single image
 
 
             //upload file without watermark and resized image edit images
@@ -379,8 +342,9 @@ class PhotoController extends Controller
                 $constraint->aspectRatio();
 
             });
-            $pathOfEditOriginalImage = storage_path('/app/public/photos/originalResized') . '/' . $WithoutWatermarkResized;
-            $imgWithoutWatermarkResized->save($pathOfEditOriginalImage); //for edit show images
+            $pathOfEditOriginalImage = public_path() . '/images/photos/originalResized/';
+            // $imgWithoutWatermarkResized->save($pathOfEditOriginalImage); //for edit show images
+            $imgWithoutWatermarkResized->save($pathOfEditOriginalImage . $WithoutWatermarkResized);
 
 
 
@@ -470,15 +434,15 @@ class PhotoController extends Controller
 
         if($request->hasfile('image') && $request->image != '')
         {
-            $image_path           = storage_path('/app/public/photos/') . '/' . $photo->image;
+            $image_path           = public_path() . '/images/photos/' . $photo->image;
             //image path for small thumbnail
-            $small_thumbnail_path = storage_path('/app/public/photos/thumbnail') . '/' . $photo->small_thumbnail;
+            $small_thumbnail_path = public_path() . '/images/photos/thumbnail/' . $photo->small_thumbnail;
             //image path for original image
-            $original_image_path  = storage_path('/app/public/photos/originalImage') . '/' . $photo->original_image;
+            $original_image_path  = public_path() . '/images/photos/originalImage/' . $photo->original_image;
             //image path for single image
-            $watermark_image_path    = storage_path('/app/public/photos/singleImage') . '/' . $photo->singleImage;
+            $watermark_image_path = public_path() . '/images/photos/singleImage/' . $photo->singleImage;
             //image path for original resized image
-            $original_resized_image_path    = storage_path('/app/public/photos/OriginalResized') . '/' . $photo->originalResized;
+            $original_resized_image_path = public_path() . '/images/photos/OriginalResized/' . $photo->originalResized;
             //if file exists delete multiple images
             if(File::exists($image_path) && File::exists($small_thumbnail_path)
                 && File::exists($original_image_path)
@@ -502,33 +466,30 @@ class PhotoController extends Controller
             });
             $height = $imgFileCollection->height();
             $width = $imgFileCollection->width();
-            $pathCollection         = storage_path('/app/public/photos/') . '/' . $ImageNameCollection;
-            $imgFileCollection->save($pathCollection);
+            $pathCollection         = public_path() . '/images/photos/';
+            $imgFileCollection->save($pathCollection . $ImageNameCollection);
 
 
            //upload file for small thmbnails
-           $filenamewithextension    = $image->getClientOriginalName();
-           $filename                 = pathinfo($filenamewithextension, PATHINFO_FILENAME);
-           //get extension
-           $extension = $image->getClientOriginalExtension();
+           $image                  = $request->file('image');
+
            //filename to store
-           $smallfilenametostore = $filename.'_small_'.time().'.'.$extension;
+           $smallfilenametostore = time().'small_thumbnail' .$image->getClientOriginalName();
            //resize image in storage
-           $smallthumbnailpath      = storage_path('/app/public/photos/thumbnail') . '/' . $smallfilenametostore;
+           $smallthumbnailpath      = public_path() . '/images/photos/thumbnail/';
            $smallthumbnail          = Image::make($image->getRealPath());
             $smallthumbnail->resize(150, 93, function($constraint)
             {
                 $constraint->aspectRatio();
 
             });
-           $smallthumbnail->save($smallthumbnailpath);
+           $smallthumbnail->save($smallthumbnailpath . $smallfilenametostore);
 
            //upload file without watermark and original image
            $ImageNameOriginal       = time().$image->getClientOriginalName();
            $imgFileOriginal         = Image::make($image->getRealPath());       //image resize from here;
-           $pathOfCollectionImage   = storage_path('/app/public/photos/originalImage') . '/' . $ImageNameOriginal;
-           $imgFileOriginal->save($pathOfCollectionImage);
-
+           $pathOfCollectionImage   = public_path() . '/images/photos/originalImage/';
+           $imgFileOriginal->save($pathOfCollectionImage . $ImageNameOriginal);
 
 
             //upload file with watermark and resized image with new variable single image
@@ -539,28 +500,45 @@ class PhotoController extends Controller
                 $constraint->aspectRatio();
 
             });
-            $pathOfWatermarkImage = storage_path('/app/public/photos/singleImage') . '/' . $ImageNameWatermark;
-            $watermarkPath = public_path('frontend/img/logo.png');
+            $pathOfWatermarkImage   = public_path() . '/images/photos/singleImage/';
+            $watermarkPath          = public_path('frontend/img/logo.png');
             $watermark              = Image::make($watermarkPath)->resize(160, 30)->opacity(40);
             $wmarkWidth             = $watermark->width();
             $wmarkHeight            = $watermark->height();
             $imgHeight              = $SingleImage->height();
             $imgWidth               = $SingleImage->width();
+
+
+
+
+            // dd('panorama');
             $x                      = 20;
-            $y                      = 10;
+            $xx                     = 40;
+            $y                      = 20;
+
             while ($x < $imgWidth) {
-                $y = 10;
+                $y = 20;
+                $xx = $x;
+                $line = 1;
                 while($y < $imgHeight) {
-                    $SingleImage->insert($watermark, 'top-left', $x, $y);
-                    $y += $wmarkHeight+70;
+                    if($line%2 == 0) {
+                        $xx = $x+150;
+                    }
+                    $SingleImage->insert($watermark, 'top-left', $xx, $y);
+                    $y += $wmarkHeight+100;
+                    $xx = $x;
+
+                    $line += 1;
                 }
-                $x += $wmarkWidth+70;
+
+                  $x += $wmarkWidth+150;
+
             }
-            $SingleImage->save($pathOfWatermarkImage, 80); //for single image
+
+            $SingleImage->save($pathOfWatermarkImage . $ImageNameWatermark, 80); //for single image
 
 
-
-
+            //
 
 
 
@@ -572,8 +550,8 @@ class PhotoController extends Controller
                 $constraint->aspectRatio();
 
             });
-            $pathOfEditOriginalImage = storage_path('/app/public/photos/originalResized') . '/' . $WithoutWatermarkResized;
-            $imgWithoutWatermarkResized->save($pathOfEditOriginalImage); //for edit show images
+            $pathOfEditOriginalImage = public_path() . '/images/photos/originalResized/';
+            $imgWithoutWatermarkResized->save($pathOfEditOriginalImage . $WithoutWatermarkResized); //for edit show images
 
 
         } else {
