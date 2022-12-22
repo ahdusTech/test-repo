@@ -83,7 +83,7 @@ label{
             <label for="image" class="col-form-label" style="width: 20%;"> Bild <code>*</code></label>
             <div style="width: 30%;">
 
-                <img src=" {{ asset('/storage/photos/originalResized/'.$photo->originalResized) }} "
+                <img src=" {{ asset('/images/photos/originalResized/'.$photo->originalResized) }} "
                 style="object-fit: cover;width: 32.255rem;border: 1px solid lightgrey;">
 
             </div>
