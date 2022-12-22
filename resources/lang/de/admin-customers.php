@@ -4,6 +4,7 @@ return [
     'title' => 'Kunden',
     'table_column_id' => 'ID',
     /*'table_column_id' => 'Kunden-ID',*/
+    // 'table_column_id' => 'ID and password just checking',
     'table_column_title' => 'Anrede',
     'table_column_name' => 'Vorname ',
     'table_column_last_name' => 'Nachname ',
