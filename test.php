@@ -1,6 +1,1 @@
-cp .env.example .env
-php artisan key:generate
-composer install
-npm i
-npm run watch
-php artisan serve
+It is a test file from kamra
