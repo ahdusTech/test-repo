@@ -1,0 +1,15 @@
+<script src="{{asset('themes/jquery/jquery.min.js')}}"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="{{asset('themes/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+<script src="{{asset('themes/data-table/js/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('js/data-table-localte.js')}}"></script>
+<script src="{{asset('themes/data-table/js/dataTables.bootstrap4.min.js')}}"></script>
+<script src="{{asset('themes/select2/js/select2.full.min.js')}}"></script>
+<script src="{{asset('themes/moment/moment.min.js')}}"></script>
+<script src="{{asset('js/moment-timezone.min.js')}}"></script>
+<script src="{{asset('themes/daterangepicker/daterangepicker.js')}}"></script>
+<script src="{{asset('themes/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js')}}"></script>
+<script src="{{asset('themes/inputmask/jquery.inputmask.min.js')}}"></script>
+<script src="{{asset('js/adomino-theme.min.js')}}"></script>
+<script src="{{asset('js/adomino-common.js')}}"></script>
+<script src="{{asset('js/adomino.js')}}"></script>
