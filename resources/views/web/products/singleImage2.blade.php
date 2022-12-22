@@ -366,7 +366,7 @@ vertical-align: middle;
         <div class="image-wrapper">
             <div class="expand-img" role="button" >
                 <img src="{{ asset('frontend/img/zoom-hover-3.png') }}" alt=""></div>
-                <img id="myImg" src="{{asset('storage/photos/singleImage/'.$image->singleImage)}}">
+                <img id="myImg" src="{{asset('images/photos/singleImage/'.$image->singleImage)}}">
             </div>
 
 
