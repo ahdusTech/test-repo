@@ -1,4 +1,4 @@
-cp .env.example .env
+cp .env.example .env Testing
 php artisan key:generate
 composer install
 npm i
