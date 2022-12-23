@@ -149,19 +149,19 @@ ul {
                             </a>
                         </li>
 
-                        {{--  @foreach ($subcategories as $subcategory )
+                        @foreach ($subcategories as $subcategory )
                         @if ($subcategory->status == 'active')
 
-                        <li>  --}}
+                        <li>
                             {{--  url for subcategory photo  --}}
-                            {{--  <a class="nav-link {{ (request()->is('collections-photo/cat-id/'.$categoryId.'/cat/'.$categoryName.'/sub-id/'.$subcategory->id.'/sub/'.$subcategory->name)) ? 'active' : '' }}"
+                            <a class="nav-link {{ (request()->is('collections-photo/cat-id/'.$categoryId.'/cat/'.$categoryName.'/sub-id/'.$subcategory->id.'/sub/'.$subcategory->name)) ? 'active' : '' }}"
                                 href="{{ route('photo.collections',['categoryId' =>$categoryId,'categoryName' => $categoryName,'subcategoryId' => $subcategory->id,'subcategoryName' => $subcategory->name]) }}"
                             style="font-size: 14px;padding: 0px 0px 0px 9px;font-family: 'monseratlight';">
                                 {{ $subcategory->name }}
                             </a>
                         </li>
                         @endif
-                        @endforeach  --}}
+                        @endforeach
                 </ul>
         </div>
         <style>
