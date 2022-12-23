@@ -16,6 +16,7 @@ use App\SubCategory;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Request as Input;
 
 class PhotoController extends Controller
 {
@@ -263,6 +264,8 @@ class PhotoController extends Controller
             //resize image in storage
             $smallthumbnailpath = public_path() . '/images/photos/thumbnail/';
             $smallthumbnail = Image::make($image->getRealPath());
+            // dd($smallthumbnail);
+
             $smallthumbnail->resize(150, 93, function($constraint)
             {
                 $constraint->aspectRatio();
@@ -271,34 +274,25 @@ class PhotoController extends Controller
             $smallthumbnail->save($smallthumbnailpath . $smallfilenametostore);
 
 
-            //upload file with its original dpi values
-            $filenamewithextension = $image->getClientOriginalName();
-            $filename = pathinfo($filenamewithextension, PATHINFO_FILENAME);
-            //get extension
-            $extension = $image->getClientOriginalExtension();
-            //filename to store
-            $ImageNameOriginal = $filename.'_original_'.time().'.'.$extension;
-            //Upload File
-            $OriginalImage = Image::make($image->getRealPath());
-            $originalPath = public_path() . '/images/photos/originalImage/';
-
-            $OriginalImage->save($originalPath . $ImageNameOriginal);
-
-
-
 
             //upload file with watermark and resized image with new variable single image
-            $ImageNameWatermark= time().$image->getClientOriginalName();
-            // dd($ImageNameWatermark);
-            $SingleImage = Image::make($image->getRealPath())
+            $image = $request->file('image');
+            $pathOfWatermarkImage   = public_path() . '/images/photos/singleImage/';
+            $ImageNameWatermark= time() . '_watermakrkedImage_' .$image->getClientOriginalName();
+
+            $SingleImage = Image::make($image->getRealPath());
+
+
             // dd($SingleImage);
-            ->resize(900, 500, function($constraint)
+
+            $SingleImage->resize(900, 500, function($constraint)
             {
                 $constraint->aspectRatio();
 
             });
             // dd($SingleImage);
-            $pathOfWatermarkImage   = public_path() . '/images/photos/singleImage/';
+
+
             $watermarkPath          = public_path('frontend/img/logo.png');
             $watermark              = Image::make($watermarkPath)->resize(160, 30)->opacity(30);
             $wmarkWidth             = $watermark->width();
@@ -331,7 +325,6 @@ class PhotoController extends Controller
 
             }
 
-            // $SingleImage->save($pathOfWatermarkImage, 80); //for single image
             $SingleImage->save($pathOfWatermarkImage . $ImageNameWatermark, 80); //for single image
 
 
@@ -346,6 +339,15 @@ class PhotoController extends Controller
             $pathOfEditOriginalImage = public_path() . '/images/photos/originalResized/';
             // $imgWithoutWatermarkResized->save($pathOfEditOriginalImage); //for edit show images
             $imgWithoutWatermarkResized->save($pathOfEditOriginalImage . $WithoutWatermarkResized);
+
+
+            //upload file with its original dpi values
+            //filename to store
+            $originalImage = $request->file('image');
+            $ImageNameOriginal = time().'_original_'.$originalImage->getClientOriginalName();
+            $originalPath = public_path() . '/images/photos/originalImage/';
+
+            $originalImage->move($originalPath, $ImageNameOriginal);
 
 
 
