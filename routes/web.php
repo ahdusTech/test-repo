@@ -26,6 +26,11 @@ Route::get('/auction_automation', 'HomeController@auction_automation')->name('au
 Route::get('/access/grant', 'HomeController@access_grant')->name('request_access');
 Route::post('/access/grant', 'HomeController@access_grant')->name('access_grant');
 
+//get php info route
+Route::get('/phpinfo', function () {
+    phpinfo();
+});
+
 // testing starts
 
 
