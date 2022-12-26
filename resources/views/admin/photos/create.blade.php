@@ -68,31 +68,18 @@ label{
             </div>
         </div>
 
-        {{--  <div class="form-group" style="width: 100%;display: flex;">
-            <label for="category_id" class="col-form-label" style="width: 20%;"> Upload <code>*</code></label>
-           <div style="width: 30%;">
-            <div class="input-group control-group increment">
-                <input type="file" name="image[]" class="form-control">
-                <div class="input-group-btn">
-                  <button class="btn btn-primary AddMoreFiles" type="button">
-                    <i class="glyphicon glyphicon-plus"></i>
-                    mehr hinzufügen
-                </button>
-                </div>
-              </div>
-              <div class="clone hide">
-                <div class="control-group input-group" style="margin-top:10px">
-                  <input type="file" name="image[]" class="form-control">
-                  <div class="input-group-btn">
-                    <button class="btn btn-danger" type="button"><i class="glyphicon glyphicon-remove"></i>
-                        entfernen
-                    </button>
-                  </div>
-                </div>
-              </div>
-           </div>
+        <div class="form-group" style="width: 100%;display: flex;">
+            <label for="category_id" class="col-form-label" style="width: 20%;"> Farbton <code>*</code></label>
+            <div style="width: 30%;">
+                <select name="color" class="form-control" required>
+                    <option value="Farbe">Farbe</option>
+                    <option value="Schwarz/Weiß">Schwarz/Weiß</option>
+                    <option value="Sepia">Sepia</option>
+                </select>
+            </div>
+        </div>
 
-        </div>  --}}
+
         <div class="form-group" style="width: 100%;display: flex;">
             <label for="image" class="col-form-label" style="width: 20%;"> Upload <code>*</code>
             </label>

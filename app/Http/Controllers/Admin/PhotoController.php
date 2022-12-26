@@ -369,6 +369,10 @@ class PhotoController extends Controller
          //save original resized image name in database
         $form->originalResized =    $WithoutWatermarkResized;
 
+        //save color to database
+        $form->color           =    $request->color;
+        // dd($form->color);
+
         $categories = DB::table('categories')->where('id', $request->category_id)->first();
         $category_name = $categories->name;
 
