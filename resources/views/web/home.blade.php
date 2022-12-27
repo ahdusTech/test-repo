@@ -57,7 +57,7 @@ a:hover h2 {
             </a>
         </div>
         @endif
-        {{--@endforeach--}}
+        @endforeach
         </div>
 
 
