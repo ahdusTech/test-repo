@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                syntaxError '**/*.php'
+                phpSyntaxCheck '**/*.php'
             }
         }
     }
