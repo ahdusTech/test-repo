@@ -89,12 +89,12 @@
                             @if($column_val['name'] == 'Aktiv?')
                             style="text-align: center !important; width:35px; padding-left: 12px !important;"
                             @endif
-                            @if($column_val['name'] == 'Kategorie')
+                            @if($column_val['name'] == 'Version Aktiv')
                             style="width:140px;"
                             @endif
-                            @if($column_val['name'] == 'Unterkategorie')
+                            {{--  @if($column_val['name'] == 'Unterkategorie')
                             style="width: 140px;"
-                            @endif
+                            @endif  --}}
                             @if($column_val['name'] == 'Hochgeladenes Datum')
                             style="width:151px;"
                             @endif

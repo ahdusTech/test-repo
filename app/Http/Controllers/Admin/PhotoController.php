@@ -60,14 +60,15 @@ class PhotoController extends Controller
                 'name' => 'Beschreibung',
                 'sort' => false,
             ),
-            'category_id' => array(
-                'name' => 'Kategorie',
+            'Version Aktiv' => array(
+                // 'name' => 'Kategorie',
+                'name' => 'Version Aktiv',
                 'sort' => false,
             ),
-            'sub_category_id' => array(
-                'name' => 'Unterkategorie',
-                'sort' => false,
-            ),
+            // 'sub_category_id' => array(
+            //     'name' => 'Unterkategorie',
+            //     'sort' => false,
+            // ),
             'created_at' => array(
                 'name' => 'Hochgeladenes Datum',
                 'sort' => false,
@@ -118,28 +119,37 @@ class PhotoController extends Controller
                     ->addColumn('description', function($row){
                         return '<p style="margin: 0px">' . $row->description . '</p>';
                     })
-                    ->editColumn('category_id', function($row){
+                    ->addColumn('Version Aktiv', function($row){
 
-                        return '<p style="margin: 0px">' . $row->Category->name . '</p>';
-                    })
-                    ->editColumn('sub_category_id', function($row){
-                        if($row->subcategory == null) {
-                            return 'Keine Unterkategorie';
-                        } else {
-                        return '<p style="margin: 0px">' . $row->subcategory->name . '</p>';
+                        return '<p style="margin: 0px"> C 01</p>
+                        <p style="margin: 0px"> B 02</p>
+                        <p style="margin: 0px"> S 03</p>';
 
-                        }
                     })
+                    // ->editColumn('sub_category_id', function($row){
+                    //     if($row->subcategory == null) {
+                    //         return 'Keine Unterkategorie';
+                    //     } else {
+                    //     return '<p style="margin: 0px">' . $row->subcategory->name . '</p>';
+
+                    //     }
+                    // })
                     ->addColumn('created_at', function($row){
-                        return '<p style="margin: 0px">' . $row->created_at . '</p>';
+                        return '<p style="margin: 0px">' . $row->created_at . '</p>
+                        <p style="margin: 0px">' . $row->created_at . '</p>
+                        <p style="margin: 0px">' . $row->created_at . '</p>';
                     })
                     ->addColumn('action', function ($row) use ($category_name) {
                         return '
-                        <a href="' . url('admin/edit/photos', ['id' => $row->id, 'category_name' => $category_name ]) . '"
-                        style="cursor: pointer;color: black"><i class="fa fa-edit"></i></a>&nbsp;&nbsp;
-                        <label data-href="' . route('get-delete-modal-photo') . '"
-                        data-id="' . $row->id . '"
-                        data-name="get-delete-inquiry-modal" style="cursor: pointer" class="OpenModal"><i class="fa fa-trash"></i></label>';
+                        <p style="margin: 0px"><a href="' . url('admin/edit/photos', ['id' => $row->id, 'category_name' => $category_name ]) . '"
+                        style="cursor: pointer;color: black"><i class="fa fa-edit"></i></a></p>
+                        <p style="margin: 0px"><a href="' . url('admin/edit/photos', ['id' => $row->id, 'category_name' => $category_name ]) . '"
+                        style="cursor: pointer;color: black"><i class="fa fa-edit"></i></a></p>
+                        <p style="margin: 0px"><a href="' . url('admin/edit/photos', ['id' => $row->id, 'category_name' => $category_name ]) . '"
+                        style="cursor: pointer;color: black"><i class="fa fa-edit"></i></a></p>';
+                        // <label data-href="' . route('get-delete-modal-photo') . '"
+                        // data-id="' . $row->id . '"
+                        // data-name="get-delete-inquiry-modal" style="cursor: pointer" class="OpenModal"><i class="fa fa-trash"></i></label>;
 
                     })
                     ->rawColumns([
@@ -148,7 +158,7 @@ class PhotoController extends Controller
                         'status',
                         'description',
                         'created_at',
-                        'category_id',
+                        'Version Aktiv',
                         'image',
                         'sub_category_id',
                         'action',
