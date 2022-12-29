@@ -27,6 +27,7 @@ class CreateAuctionsTable extends Migration
             $table->timestamp('start_date')->nullable();
             $table->timestamp('end_date')->nullable();
             $table->integer('status')->default(1);
+            $table->boolean('closed');
             $table->timestamps();
             $table->softDeletes();
         });

@@ -17,7 +17,7 @@ class AddColoumsToAuctionsTable extends Migration
             $table->unsignedBigInteger('sold_to')->after('status')->nullable();
             $table->timestamp('sold_at')->after('sold_to')->nullable();
 
-            $table->foreign('sold_to')->references('id')->on('customers')->onDelete('cascade');
+            // $table->foreign('sold_to')->references('id')->on('customers')->onDelete('cascade');
         });
     }
 
