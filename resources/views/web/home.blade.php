@@ -56,7 +56,7 @@ a:hover h2 {
                 </figure>
             </a>
         </div>
-     @endif
+    {{-- @endif--}}
         @endforeach
         </div>
 
