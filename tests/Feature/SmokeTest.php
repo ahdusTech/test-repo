@@ -18,4 +18,11 @@ class ExampleTest extends TestCase
 
         $response->assertStatus(200);
     }
+    
+    public function testAdminCategoryPage()
+    {
+        $response = $this->get('/admin/category');
+
+        $response->assertStatus(200);
+    }
 }
