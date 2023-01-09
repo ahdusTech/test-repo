@@ -218,36 +218,6 @@ label{
         </table>
         </div>
 
-
-            <script>
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-
-
-                function updateStatus(id, checkbox) {
-                    $.ajax({
-                        url: "{{ route('admin.update.status') }}",
-                        type: "POST",
-                        data: {
-                            id: id,
-                            status: checkbox.checked ? 'on' : 'off'
-                        },
-                        success: function(response) {
-                            //make toastr based on response status
-                            if (response.status == 'Active') {
-                                toastr.success(response.message);
-                            } else {
-                                toastr.error(response.message);
-                            }
-                        }
-                    });
-                }
-                </script>
-
-
             </div>
             <div role="tabpanel" class="tab-pane fade" id="color">
                 <div style="width: 100%;text-align: right;">
@@ -299,7 +269,8 @@ label{
                         </td>
                         <td>{{ $black_white_version_photo->created_at }}</td>
                         <td>
-                            <input type="checkbox" {{ $black_white_version_photo->status == 'on' ? 'checked' : '' }}>
+                            <input type="checkbox" {{ $black_white_version_photo->status == 'on' ? 'checked' : '' }}
+                        name="id" onchange="updateStatus({{ $black_white_version_photo->id }}, this)">
                             <a href="{{ route('admin.delete.version', ['id' => $black_white_version_photo->id, 'photo_id' => $photo->id, 'category_name' => $category_name , 'color' => $black_white_version_photo->color]) }}" style="color: black">
                                 <i class="fa fa-trash"> </i>
                             </a>
@@ -364,7 +335,8 @@ label{
                         </td>
                         <td>{{ $sepia_version_photo->created_at }}</td>
                         <td>
-                            <input type="checkbox" {{ $sepia_version_photo->status == 'on' ? 'checked' : '' }}>
+                            <input type="checkbox" {{ $sepia_version_photo->status == 'on' ? 'checked' : '' }}
+                        name="id" onchange="updateStatus({{ $sepia_version_photo->id }}, this)">
                             <a href="{{ route('admin.delete.version', ['id' => $sepia_version_photo->id , 'photo_id' => $photo->id, 'category_name' => $category_name, 'color' => $sepia_version_photo->color]) }}" style="color: black">
                                 <i class="fa fa-trash"> </i>
                             </a>
@@ -445,6 +417,34 @@ label{
         };
     }(jQuery);
 </script>
+
+<script>
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+
+    function updateStatus(id, checkbox) {
+        $.ajax({
+            url: "{{ route('admin.update.status') }}",
+            type: "POST",
+            data: {
+                id: id,
+                status: checkbox.checked ? 'on' : 'off'
+            },
+            success: function(response) {
+                //make toastr based on response status
+                if (response.status == 'Active') {
+                    toastr.success(response.message);
+                } else {
+                    toastr.error(response.message);
+                }
+            }
+        });
+    }
+    </script>
 
 
 @endsection
