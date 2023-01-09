@@ -19,13 +19,18 @@ class CreateVersionPhotosTable extends Migration
             $table->foreign('photo_id')->references('id')->on('photos')->onDelete('cascade');
             $table->string('description')->nullable();
             $table->string('status')->nullable();
-            $table->string('image')->nullable();
+            $table->string('image_name')->nullable();
+            $table->integer('price')->nullable();
+            $table->string('color')->nullable();
+            $table->integer('counter')->nullable();
+            $table->string('WatermMarked_image')->nullable();
             $table->string('small_thumbnail')->nullable();
             $table->string('singleImage')->nullable();
             $table->string('original_image')->nullable();
-            $table->string('originalResized')->nullable();
+            $table->string('Edit_original_image')->nullable();
 
-            $table->integer('price')->nullable();
+
+
             $table->timestamps();
         });
     }

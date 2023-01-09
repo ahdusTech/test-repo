@@ -5,7 +5,7 @@
 
 <style>
     input{
-  display: none;
+  {{--  display: none;  --}}
 }
 
 label{
@@ -15,6 +15,11 @@ label{
 #imageName1{
         color: black;
       }
+
+
+.version_status {
+    {{--  display: none;  --}}
+}
 </style>
 <div class="content-wrapper">
     <div class="content-header">
@@ -45,6 +50,11 @@ label{
     <input type="hidden" name="category_id" value="{{ $category_id }}">
     <input type="hidden" name="id" value="{{ $photo->id }}">
 
+    <div>
+        <span class="version_status">
+
+        </span>
+    </div>
     <div class="card-body">
 
         {{--  <div class="form-group" style="width: 100%;display: flex;">
@@ -130,7 +140,7 @@ label{
                 </a>
             </li>
             <li role="presentation" class="nav-item">
-                <a href="#Schwarz-Weiß" aria-controls="Schwarz-Weiß" role="tab" data-toggle="tab" class="nav-link">
+                <a href="#color" aria-controls="color" role="tab" data-toggle="tab" class="nav-link">
                 Schwarz/Weiß ()
                 </a>
             </li>
@@ -146,7 +156,7 @@ label{
             <div role="tabpanel" class="tab-pane fade show active" id="Farbe">
 
                 <div style="width: 100%;text-align: right;">
-                <a href="#" class="btn btn-primary btn-sm" style="margin-top: -102px;"> Neue Version </a>
+                <a href="{{ route('admin.create.versions', ['photo_id' => $photo->id, 'counter' => $photo->counter, 'color' => 'C']) }}" class="btn btn-primary btn-sm" style="margin-top: -102px;"> Neue Version </a>
                 </div>
 
              <div class="form-group" style="width: 100%;display: flex;">
@@ -186,15 +196,62 @@ label{
                 </tr>
             </thead>
             <tbody>
+                @foreach ($color_version_photos as $key => $color_version_photo)
+                <tr>
+                    <td style="text-align: right !important; padding-right: 6px;">{{ ++$key }}</td>
+                    <td style="text-align: right !important; padding-right: 6px;">{{ $color_version_photo->counter }}</td>
+                    <td style="text-align: center;">
+                        <img src="{{ asset('/images/version_photos/thumbnail/'.$color_version_photo->small_thumbnail) }}" style="width: 100px;height: 100px;object-fit: cover;">
+                    </td>
+                    <td>{{ $color_version_photo->created_at }}</td>
+                    <td>
+                        <input type="checkbox" {{ $color_version_photo->status == 'on' ? 'checked' : '' }}
+                        name="id" onchange="updateStatus({{ $color_version_photo->id }}, this)">
+                        <a href="{{ route('admin.delete.version', ['id' => $color_version_photo->id, 'photo_id' => $photo->id, 'category_name' => $category_name, 'color' => $color_version_photo->color]) }}" style="color: black">
+                            <i class="fa fa-trash"> </i>
+                        </a>
+
+                    </td>
+                </tr>
+                @endforeach
             </tbody>
         </table>
         </div>
 
 
+            <script>
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+
+
+                function updateStatus(id, checkbox) {
+                    $.ajax({
+                        url: "{{ route('admin.update.status') }}",
+                        type: "POST",
+                        data: {
+                            id: id,
+                            status: checkbox.checked ? 'on' : 'off'
+                        },
+                        success: function(response) {
+                            //make toastr based on response status
+                            if (response.status == 'Active') {
+                                toastr.success(response.message);
+                            } else {
+                                toastr.error(response.message);
+                            }
+                        }
+                    });
+                }
+                </script>
+
+
             </div>
-            <div role="tabpanel" class="tab-pane fade" id="Schwarz-Weiß">
+            <div role="tabpanel" class="tab-pane fade" id="color">
                 <div style="width: 100%;text-align: right;">
-                    <a href="#" type="button" class="btn btn-primary btn-sm" style="margin-top: -102px;"> Neue Version </a>
+                    <a href="{{ route('admin.create.versions', ['photo_id' => $photo->id, 'counter' => $photo->counter, 'color' => 'B']) }}" type="button" class="btn btn-primary btn-sm" style="margin-top: -102px;"> Neue Version </a>
                     </div>
                 <div class="form-group" style="width: 100%;display: flex;">
                     <label for="name" class="col-form-label" style="width: 20%;"> Kategorie 1: </label>
@@ -233,6 +290,23 @@ label{
                     </tr>
                 </thead>
                 <tbody>
+                    @foreach ($black_white_version_photos as $key => $black_white_version_photo)
+                    <tr>
+                        <td style="text-align: right !important; padding-right: 6px;">{{ ++$key }}</td>
+                        <td style="text-align: right !important; padding-right: 6px;">{{ $black_white_version_photo->counter }}</td>
+                        <td style="text-align: center;">
+                        <img src="{{ asset('/images/version_photos/thumbnail/'.$black_white_version_photo->small_thumbnail) }}" style="width: 100px;height: 100px;object-fit: cover;">
+                        </td>
+                        <td>{{ $black_white_version_photo->created_at }}</td>
+                        <td>
+                            <input type="checkbox" {{ $black_white_version_photo->status == 'on' ? 'checked' : '' }}>
+                            <a href="{{ route('admin.delete.version', ['id' => $black_white_version_photo->id, 'photo_id' => $photo->id, 'category_name' => $category_name , 'color' => $black_white_version_photo->color]) }}" style="color: black">
+                                <i class="fa fa-trash"> </i>
+                            </a>
+
+                        </td>
+                    </tr>
+                    @endforeach
                 </tbody>
             </table>
             </div>
@@ -242,7 +316,7 @@ label{
             </div>
             <div role="tabpanel" class="tab-pane" id="Sepia">
                 <div style="width: 100%;text-align: right;">
-                    <a href="#" type="button" class="btn btn-primary btn-sm" style="margin-top: -102px;"> Neue Version </a>
+                    <a href="{{ route('admin.create.versions', ['photo_id' => $photo->id, 'counter' => $photo->counter, 'color' => 'S']) }}" type="button" class="btn btn-primary btn-sm" style="margin-top: -102px;"> Neue Version </a>
                     </div>
                 <div class="form-group" style="width: 100%;display: flex;">
                     <label for="name" class="col-form-label" style="width: 20%;"> Kategorie 1: </label>
@@ -281,6 +355,23 @@ label{
                     </tr>
                 </thead>
                 <tbody>
+                    @foreach ($sepia_version_photos as $key => $sepia_version_photo)
+                    <tr>
+                        <td style="text-align: right !important; padding-right: 6px;">{{ ++$key }}</td>
+                        <td style="text-align: right !important; padding-right: 6px;">{{ $sepia_version_photo->counter }}</td>
+                        <td style="text-align: center;">
+                            <img src="{{ asset('/images/version_photos/thumbnail/'.$sepia_version_photo->small_thumbnail) }}" style="width: 100px;height: 100px;object-fit: cover;">
+                        </td>
+                        <td>{{ $sepia_version_photo->created_at }}</td>
+                        <td>
+                            <input type="checkbox" {{ $sepia_version_photo->status == 'on' ? 'checked' : '' }}>
+                            <a href="{{ route('admin.delete.version', ['id' => $sepia_version_photo->id , 'photo_id' => $photo->id, 'category_name' => $category_name, 'color' => $sepia_version_photo->color]) }}" style="color: black">
+                                <i class="fa fa-trash"> </i>
+                            </a>
+
+                        </td>
+                    </tr>
+                    @endforeach
                 </tbody>
             </table>
             </div>
@@ -294,7 +385,8 @@ label{
 <a href="{{ route('admin.photos', [$category_name]) }}" class="btn btn-default btn-sm filterButton" style="border-color: #ddd">
     Abbrechen
 </a>
-    <button type="submit" class="btn btn-primary btn-sm filterButton" style="font-size: 13px;"> Unterkategorie erstellen </button>
+    {{--  <button type="submit" class="btn btn-primary btn-sm filterButton" style="font-size: 13px;"> Unterkategorie erstellen </button>  --}}
+    <a href="#" class="btn btn-primary btn-sm" style="font-size: 13px;"> Unterkategorie erstellen </a>
 
 </div>
 

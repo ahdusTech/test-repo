@@ -22,6 +22,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <link rel="stylesheet" href="{{ asset('toastr/build/toastr.min.css') }}">
+    <script src="{{ asset('toastr/build/toastr.min.js') }}"></script>
+
 
     {{-- <script>
         window.addEventListener('beforeunload', function (e) {

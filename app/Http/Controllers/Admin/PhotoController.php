@@ -13,6 +13,7 @@ use Imagick;
 use Yajra\Datatables\Datatables;
 use App\Category;
 use App\SubCategory;
+use App\VersionPhoto;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\File;
@@ -84,6 +85,7 @@ class PhotoController extends Controller
 
     public function getAllPhotos(Request $request)
     {
+        // dd($request->all());
         // if ($request->has('value')) {
         //     dd($request->has('value'));
         // }
@@ -91,8 +93,10 @@ class PhotoController extends Controller
         // // jo searched kya uska category ka id
         $category_id = Category::where('name', $request->search['value'])->value('id');
         $category_name = $request->search['value'];
+        // dd($category_name);
         $all_photos = Photo::query()->where('category_id', $category_id)->get();
         // dd($all_photos);
+
 
             return Datatables::of($all_photos)
                     ->addColumn('consecutive', function($row){
@@ -119,11 +123,17 @@ class PhotoController extends Controller
                     ->addColumn('description', function($row){
                         return '<p style="margin: 0px">' . $row->description . '</p>';
                     })
-                    ->addColumn('Version Aktiv', function($row){
+                    ->addColumn('Version Aktiv', function($row) {
+                        $count_color_C = VersionPhoto::where('photo_id', $row->id)->where('color', 'C')->count();
+                        $count_color_C = $count_color_C < 10 ? '0' . $count_color_C : $count_color_C;
+                        $count_color_B = VersionPhoto::where('photo_id', $row->id)->where('color', 'B')->count();
+                        $count_color_B = $count_color_B < 10 ? '0' . $count_color_B : $count_color_B;
+                        $count_color_S = VersionPhoto::where('photo_id', $row->id)->where('color', 'S')->count();
+                        $count_color_S = $count_color_S < 10 ? '0' . $count_color_S : $count_color_S;
 
-                        return '<p style="margin: 0px"> C 01</p>
-                        <p style="margin: 0px"> B 02</p>
-                        <p style="margin: 0px"> S 03</p>';
+                        return '<p style="margin: 0px"> C ' . $count_color_C .'</p>
+                        <p style="margin: 0px"> B ' .         $count_color_B .'</p>
+                         <p style="margin: 0px"> S ' .        $count_color_S . '</p>';
 
                     })
                     // ->editColumn('sub_category_id', function($row){
@@ -135,17 +145,25 @@ class PhotoController extends Controller
                     //     }
                     // })
                     ->addColumn('created_at', function($row){
-                        return '<p style="margin: 0px">' . $row->created_at . '</p>
-                        <p style="margin: 0px">' . $row->created_at . '</p>
-                        <p style="margin: 0px">' . $row->created_at . '</p>';
+                        $null_color = VersionPhoto::where('photo_id', $row->id)->where('color', 'C')->orderBy('created_at', 'desc')->value('created_at');
+                        $null_color = $null_color == null ? '0000-00-00 00:00:00' : $null_color;
+                        $null_black = VersionPhoto::where('photo_id', $row->id)->where('color', 'B')->orderBy('created_at', 'desc')->value('created_at');
+                        $null_black = $null_black == null ? '0000-00-00 00:00:00' : $null_black;
+                        $null_sepia = VersionPhoto::where('photo_id', $row->id)->where('color', 'S')->orderBy('created_at', 'desc')->value('created_at');
+                        $null_sepia = $null_sepia == null ? '0000-00-00 00:00:00' : $null_sepia;
+
+
+                        return '<p style="margin: 0px">' .  $null_color . '</p>
+                        <p style="margin: 0px">' . $null_black . '</p>
+                        <p style="margin: 0px">' . $null_sepia . '</p>';
                     })
                     ->addColumn('action', function ($row) use ($category_name) {
                         return '
-                        <p style="margin: 0px"><a href="' . url('admin/edit/photos', ['id' => $row->id, 'category_name' => $category_name ]) . '"
+                        <p style="margin: 0px"><a href="' . url('admin/edit/photos/'. $row->id . '/' . $category_name . '#Farbe') . '"
                         style="cursor: pointer;color: black"><i class="fa fa-edit"></i></a></p>
-                        <p style="margin: 0px"><a href="' . url('admin/edit/photos', ['id' => $row->id, 'category_name' => $category_name ]) . '"
+                        <p style="margin: 0px"><a href="' . url('admin/edit/photos/'. $row->id . '/' . $category_name . '#color') . '"
                         style="cursor: pointer;color: black"><i class="fa fa-edit"></i></a></p>
-                        <p style="margin: 0px"><a href="' . url('admin/edit/photos', ['id' => $row->id, 'category_name' => $category_name ]) . '"
+                        <p style="margin: 0px"><a href="' . url('admin/edit/photos/'. $row->id . '/' . $category_name . '#Sepia') . '"
                         style="cursor: pointer;color: black"><i class="fa fa-edit"></i></a></p>';
                         // <label data-href="' . route('get-delete-modal-photo') . '"
                         // data-id="' . $row->id . '"
@@ -160,7 +178,7 @@ class PhotoController extends Controller
                         'created_at',
                         'Version Aktiv',
                         'image',
-                        'sub_category_id',
+                        // 'sub_category_id',
                         'action',
                         ])
                     ->make(true);
@@ -380,13 +398,38 @@ class PhotoController extends Controller
         $form->originalResized =    $WithoutWatermarkResized;
 
         //save color to database
-        $form->color           =    $request->color;
+        if($request->color == 'Farbe'){
+            $form->color = 'C';
+        }elseif($request->color == 'Schwarz/Weiß'){
+            $form->color = 'B';
+        } else{
+            $form->color = 'S';
+        }
         // dd($form->color);
 
         $categories = DB::table('categories')->where('id', $request->category_id)->first();
         $category_name = $categories->name;
 
         $form->save();
+
+        //make the $counter starts from 01 for each photo and increase by 1
+        $counter = 1;
+        if($counter < 10){
+            $counter = '0'.$counter;
+        }
+        // else{
+        //     $counter++;
+        // }
+
+        // dd($counter);
+
+        //update the image_name column in photos table with the image photo_id
+        $photo_id = $form->id;
+        $photo = Photo::find($photo_id);
+        $photo->image_name = 'nzphotos-'.$form->color.$photo_id.$counter.'-original.jpg';
+        $photo->counter = $counter;
+        $photo->save();
+
 
 
         return redirect()->route('admin.photos', [$category_name])
@@ -417,10 +460,40 @@ class PhotoController extends Controller
         $category_name = $categories->name;
         // dd($category_name);
         $photo = Photo::findOrfail($photo_id);
+        // dd($photo->counter);
         $sub_categories = SubCategory::with('category')
         ->where('category_id',$category_id)
         ->get();
-        return view('admin.photos.edit', compact('photo', 'sub_categories' ,'category_id', 'category_name'));
+
+        $color_version_photos = DB::table('version_photos')
+        ->select('version_photos.*')
+        ->where([
+            'version_photos.photo_id' => $photo_id,
+            'version_photos.color' => 'C',
+            ])
+        ->orderBy('version_photos.created_at', 'desc')
+        ->get();
+
+        $black_white_version_photos = DB::table('version_photos')
+        ->select('version_photos.*')
+        ->where([
+            'version_photos.photo_id' => $photo_id,
+            'version_photos.color' => 'B',
+            ])
+        ->orderBy('version_photos.created_at', 'desc')
+        ->get();
+
+        $sepia_version_photos = DB::table('version_photos')
+        ->select('version_photos.*')
+        ->where([
+            'version_photos.photo_id' => $photo_id,
+            'version_photos.color' => 'S',
+            ])
+        ->orderBy('version_photos.created_at', 'desc')
+        ->get();
+
+
+        return view('admin.photos.edit', compact('photo', 'sub_categories' ,'category_id', 'category_name', 'color_version_photos', 'black_white_version_photos', 'sepia_version_photos'));
     }
 
     /**

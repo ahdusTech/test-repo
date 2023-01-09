@@ -9,14 +9,18 @@ class VersionPhoto extends Model
 
     protected $fillable = [
         'price',
-        'image',
+        'WatermMarked_image',
         'status',
         'small_thumbnail',
         'singleImage',
         'original_image',
         'description',
         'photo_id',
-        'originalResized'
+        'Edit_original_image',
+        'image_name',
+        'counter',
+        'color',
+
     ];
 
     public function photo()

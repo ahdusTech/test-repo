@@ -6,12 +6,17 @@
 # Node artifact files
 node_modules/
 dist/
+bootstrap/
+vendor/
 
 /vendor
 .env
 # Compiled Java class files
 *.class
-
+composer.lock
+composer.json
+package-lock.json
+package.json
 # Compiled Python bytecode
 *.py[cod]
 

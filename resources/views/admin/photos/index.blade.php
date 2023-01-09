@@ -45,7 +45,7 @@
                                      </select>
 
                                 <span class="input-group-append">
-                                    <button type="submit" onclick="updatePhoto()" class="btn btn-primary yajraBtnSearch">Suchen</button>
+                                    <button type="button" onclick="updatePhoto()" class="btn btn-primary yajraBtnSearch">Suchen</button>
                                 </span>
 
 

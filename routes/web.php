@@ -254,6 +254,21 @@ Route::group([
             // photo ended
 
 
+            //version part started
+
+            Route::get('/create-versions/{photo_id}/{counter}/{color}', 'VersionPhotoController@create')->name('admin.create.versions');
+            Route::post('/store-versions', 'VersionPhotoController@store')->name('admin.store.version.photos');
+            //make route admin.delete.versions
+            Route::get('/delete-versions/{id}/{photo_id}/{category_name}/{color}', 'VersionPhotoController@destroy')->name('admin.delete.version');
+            Route::post('/records', 'VersionPhotoController@updateStatus')->name('admin.update.status');
+
+
+
+
+
+            //version part ended
+
+
             //Customer part started
             Route::get('/customers', 'CustomerController@index')->name('admin.customers');
             Route::get('/customer/add-new-customer', 'CustomerController@create')->name('admin.customer.create_page');

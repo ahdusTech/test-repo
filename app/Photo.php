@@ -17,7 +17,11 @@ class Photo extends Model
         'original_image',
         'description',
         'sub_category_id',
-        'category_id'
+        'category_id',
+        'originalResized',
+        'color',
+        'image_name',
+        'counter',
     ];
 
     public function category()
