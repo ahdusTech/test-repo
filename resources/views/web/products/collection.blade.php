@@ -160,7 +160,7 @@ ul {
                                 {{ $subcategory->name }}
                             </a>
                         </li>
-                        @endif
+                       {{-- @endif--}}
                         @endforeach
                 </ul>
         </div>
