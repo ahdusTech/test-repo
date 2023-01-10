@@ -238,10 +238,11 @@ vertical-align: middle;
     }
     .singleImage img {
         margin: auto;
-            display: block;
-           /*  width: 100%;  */
-            max-width: 100%;
-            /*  object-fit: cover;  */
+        display: block;
+        /*  width: 100%;  */
+        max-width: 100%;
+        /*  object-fit: cover;  */
+        max-height: 500px;
 
     }
 

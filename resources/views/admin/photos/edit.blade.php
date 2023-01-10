@@ -435,7 +435,6 @@ label{
                 status: checkbox.checked ? 'on' : 'off'
             },
             success: function(response) {
-                //make toastr based on response status
                 if (response.status == 'Active') {
                     toastr.success(response.message);
                 } else {

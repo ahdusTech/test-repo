@@ -307,26 +307,50 @@ class PhotoController extends Controller
             $image = $request->file('image');
             $pathOfWatermarkImage   = public_path() . '/images/photos/singleImage/';
             $ImageNameWatermark= time() . '_watermakrkedImage_' .$image->getClientOriginalName();
-
             $SingleImage = Image::make($image->getRealPath());
+
+            $width_SingleImage = $SingleImage->width();
+            $height_SingleImage = $SingleImage->height();
+            // dd($width_SingleImage, $height_SingleImage);
+
+            if($height_SingleImage > $width_SingleImage) {
+                $width_SingleImage = (2048/$width_SingleImage) * $height_SingleImage;
+                //round off the value increase 1 if value is greater than 0.5
+                $width_SingleImage = round($width_SingleImage);
+                $height_SingleImage = 2048;
+                // dd($width_SingleImage, 'x' ,$height_SingleImage);
+
+            } elseif ($width_SingleImage > $height_SingleImage) {
+                $height_SingleImage = (2048/$width_SingleImage) * $height_SingleImage;
+                //round off the value increase 1 if value is greater than 0.5
+                $height_SingleImage = round($height_SingleImage);
+                $width_SingleImage = 2048;
+                // dd($width_SingleImage, 'x' ,$height_SingleImage);
+            } else {
+                $height_SingleImage = 2048;
+                $width_SingleImage = 2048;
+                // dd($width_SingleImage, 'x' ,$height_SingleImage);
+            }
 
 
             // dd($SingleImage);
-
-            $SingleImage->resize(900, 500, function($constraint)
+            $SingleImage->resize($width_SingleImage, $height_SingleImage, function($constraint)
             {
                 $constraint->aspectRatio();
 
             });
+
             // dd($SingleImage);
 
-
             $watermarkPath          = public_path('frontend/img/logo.png');
-            $watermark              = Image::make($watermarkPath)->resize(160, 30)->opacity(30);
-            $wmarkWidth             = $watermark->width();
-            $wmarkHeight            = $watermark->height();
             $imgHeight              = $SingleImage->height();
             $imgWidth               = $SingleImage->width();
+
+            if($imgWidth > $imgHeight) {
+                $watermark              = Image::make($watermarkPath)->resize(500, 120)->opacity(30);
+                $wmarkWidth             = $watermark->width();
+            $wmarkHeight            = $watermark->height();
+
             // dd($imgWidth, $imgHeight);
 
             // dd('panorama');
@@ -340,10 +364,10 @@ class PhotoController extends Controller
                 $line = 1;
                 while($y < $imgHeight) {
                     if($line%2 == 0) {
-                        $xx = $x+150;
+                        $xx = $x+290;
                     }
                     $SingleImage->insert($watermark, 'top-left', $xx, $y);
-                    $y += $wmarkHeight+100;
+                    $y += $wmarkHeight+180;
                     $xx = $x;
 
                     $line += 1;
@@ -352,6 +376,39 @@ class PhotoController extends Controller
                   $x += $wmarkWidth+150;
 
             }
+            } else {
+                $watermark              = Image::make($watermarkPath)->resize(750, 180)->opacity(30);
+                $wmarkWidth             = $watermark->width();
+            $wmarkHeight            = $watermark->height();
+
+            // dd($imgWidth, $imgHeight);
+
+            // dd('panorama');
+            $x                      = 20;
+            $xx                     = 40;
+            $y                      = 20;
+
+            while ($x < $imgWidth) {
+                $y = 20;
+                $xx = $x;
+                $line = 1;
+                while($y < $imgHeight) {
+                    if($line%2 == 0) {
+                        $xx = $x+290;
+                    }
+                    $SingleImage->insert($watermark, 'top-left', $xx, $y);
+                    $y += $wmarkHeight+220;
+                    $xx = $x;
+
+                    $line += 1;
+                }
+
+                  $x += $wmarkWidth+150;
+
+            }
+            }
+
+
 
             $SingleImage->save($pathOfWatermarkImage . $ImageNameWatermark, 80); //for single image
 

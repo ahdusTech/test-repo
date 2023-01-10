@@ -398,12 +398,7 @@ margin-right: 7px;
                 </div>
         </a>
 
-            {{--  <div class="img zoom ">
-                <a href="{{ url('/products/singleImage/' . $latestPhoto->id ) }}">
-                <img src="{{ asset('storage/photos/'.$latestPhoto->image) }}" />
-                </a>
-                <p style="margin-bottom: 4px;line-height: 17px;">{{ $latestPhoto->description  }}</p>
-              </div>  --}}
+
             @endif
         @endforeach
 

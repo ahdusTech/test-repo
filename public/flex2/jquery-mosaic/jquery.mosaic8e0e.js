@@ -301,16 +301,19 @@
 	$.Mosaic.defaults = {
 		maxRowHeight: 400, // The maximum desired height of rows
 		refitOnResize: true, // Whether to rebuild the mosaic when the window is resized or not
-		refitOnResizeDelay: false, // Milliseconds to wait after a resize event to refit the mosaic. Useful when creating huge mosaics that can take some CPU time on the user's browser. Leave it to false to refit the mosaic in realtime.
+		refitOnResizeDelay: true, // Milliseconds to wait after a resize event to refit the mosaic. Useful when creating huge mosaics that can take some CPU time on the user's browser. Leave it to false to refit the mosaic in realtime.
 		defaultAspectRatio: 1, // The aspect ratio to use when none has been specified, or can't be calculated
 		maxRowHeightPolicy: 'skip', // Sometimes some of the remaining items cannot be fitted on a row without surpassing the maxRowHeight. For those cases, choose one of the available settings for maxRowHeightPolicy: "skip": Does not renders the unfitting items. "crop": caps the desired height to the specified maxRowHeight, resulting in those items not keeping their aspect ratios. "oversize": Renders the items respecting their aspect ratio but surpassing the specified maxRowHeight
-		maxRows: false, // In some scenarios you might need fine control about the maximum number of rows of the mosaic. If specified, the mosaic won't have more than this number of rows. If responsiveWidthThreshold is specified, maxRows are not considered when the threshold has been reached.
-		highResImagesWidthThreshold: 350, // The item width on which to start using the the provided high resolution image instead of the normal one. High resolution images are specified via the "data-high-res-image-src" or "data-high-res-background-image-url" html element properties of each item.
+		maxRows: true, // In some scenarios you might need fine control about the maximum number of rows of the mosaic. If specified, the mosaic won't have more than this number of rows. If responsiveWidthThreshold is specified, maxRows are not considered when the threshold has been reached.
+		highResImagesWidthThreshold: 850, // The item width on which to start using the the provided high resolution image instead of the normal one. High resolution images are specified via the "data-high-res-image-src" or "data-high-res-background-image-url" html element properties of each item.
 		outerMargin: 0, // A margin size in pixels for the outher edge of the whole mosaic
 		innerGap: 7, // A gap size in pixels to leave a space between elements
-		responsiveWidthThreshold: false, // The minimum width for which to keep building the mosaic. If specified, when the width is less than this, the mosaic building logic is not applied, and one item per row is always shown. This might help you avoid resulting item sizes that are too small and might break complex html/css inside them, specially when aiming for great responsive mosaics.
-		maxItemsToShowWhenResponsiveThresholdSurpassed: false, // If set (and also responsiveWidthThreshold is set), only this amount of items will be shown when the responsiveWidthThreshold is met
-		showTailWhenNotEnoughItemsForEvenOneRow: false, // If this is set to true, when there are not enough items to fill even a single row, they will be shown anyway even if they do not complete the row horizontally. If left to false, no mosaic will be shown in such occasions.
+		responsiveWidthThreshold: true, // The minimum width for which to keep building the mosaic. If specified, when the width is less than this, the mosaic building logic is not applied, and one item per row is always shown. This might help you avoid resulting item sizes that are too small and might break complex html/css inside them, specially when aiming for great responsive mosaics.
+		maxItemsToShowWhenResponsiveThresholdSurpassed: true, // If set (and also responsiveWidthThreshold is set), only this amount of items will be shown when the responsiveWidthThreshold is met
+		showTailWhenNotEnoughItemsForEvenOneRow: true, // If this is set to true, when there are not enough items to fill even a single row, they will be shown anyway even if they do not complete the row horizontally. If left to false, no mosaic will be shown in such occasions.
+        onlyForceHeightWhenNecessary: true, // If set to true, the height of the items will only be forced when necessary, that is, when the item is not an image or when the image is not loaded yet. This is useful to avoid flickering when the images are already loaded and the height is not forced. If set to false, the height of the items will always be forced, even if the image is already loaded.
+        onItemResize: function(item, width, height) { } // A callback function to be called when an item is resized. The item, width and height are passed as parameters.
+
 	};
 
 	$.fn.Mosaic = function(options, params) {
