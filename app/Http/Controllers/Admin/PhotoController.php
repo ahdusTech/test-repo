@@ -270,30 +270,45 @@ class PhotoController extends Controller
         if($request->hasfile('image'))
          {
 
-            $image = $request->file('image');
-            $ImageNameresized= time().$image->getClientOriginalName();
-            // $imgFileCollection = Image::make($image->getRealPath())->resize(888, 666);       //image resize from here;
-            $imgFileCollection = Image::make($image->getRealPath());       //image resize from here;
+            $image                      = $request->file('image');
+            $ImageNameresized           = time().$image->getClientOriginalName();
+            $imgFileCollection          = Image::make($image->getRealPath());       //image resize from here;
+            $height_imgFileCollection   = $imgFileCollection->height();
+            $width_imgFileCollection    = $imgFileCollection->width();
+
+            if($height_imgFileCollection > $width_imgFileCollection) {
+                $width_imgFileCollection = (2048/$width_imgFileCollection) * $height_imgFileCollection;
+                //round off the value increase 1 if value is greater than 0.5
+                $width_imgFileCollection = round($width_imgFileCollection);
+                $height_imgFileCollection = 2048;
+                // dd($width_imgFileCollection, 'x' ,$height_imgFileCollection);
+
+            } elseif ($width_imgFileCollection > $height_imgFileCollection) {
+                $height_imgFileCollection = (2048/$width_imgFileCollection) * $height_imgFileCollection;
+                //round off the value increase 1 if value is greater than 0.5
+                $height_imgFileCollection = round($height_imgFileCollection);
+                $width_imgFileCollection = 2048;
+                // dd($width_imgFileCollection, 'x' ,$height_imgFileCollection);
+            } else {
+                $height_imgFileCollection = 2048;
+                $width_imgFileCollection = 2048;
+                // dd($width_imgFileCollection, 'x' ,$height_SingleImage);
+            }
+
+
             $imgFileCollection->resize(600, 340, function($constraint)
             {
                 $constraint->aspectRatio();
 
             });
-            $height = $imgFileCollection->height();
-            $width = $imgFileCollection->width();
             $pathOfOriginalImage = public_path() . '/images/photos/';
             $imgFileCollection->save($pathOfOriginalImage . $ImageNameresized);
-
 
             //upload file for small thmbnails
             $image = $request->file('image');
             $smallfilenametostore = time(). 'small_thumbnail '.$image->getClientOriginalName();
-
-            //resize image in storage
             $smallthumbnailpath = public_path() . '/images/photos/thumbnail/';
             $smallthumbnail = Image::make($image->getRealPath());
-            // dd($smallthumbnail);
-
             $smallthumbnail->resize(150, 93, function($constraint)
             {
                 $constraint->aspectRatio();
